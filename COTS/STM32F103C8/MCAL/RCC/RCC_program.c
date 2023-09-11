@@ -57,13 +57,6 @@ Std_ReturnType MCAL_RCC_InitSysClock(void)
 
 #elif RCC_SYSCLK == RCC_PLL
 
-    /**< Enable PLL. */
-    SET_BIT(RCC_CR, RCC_CR_PLLON);
-
-    /**< Wait until the PLL clock is locked. */
-    while (!GET_BIT(RCC_CR, RCC_CR_PLLRDY))
-        ;
-
         /**< PLL CLK Source */
 #if RCC_PLL_INPUT == RCC_PLL_HSI_DIV_2
     CLR_BIT(RCC_CFGR, RCC_CFGR_PLLSRC);
@@ -77,6 +70,14 @@ Std_ReturnType MCAL_RCC_InitSysClock(void)
 
     /**<PLL MUL Value */
     RCC_CFGR = ((RCC_CFGR & 0xFFC3FFFF) | (RCC_PLL_MUL << RCC_CFGR_PLLMUL0));
+
+    
+    /**< Enable PLL. */
+    SET_BIT(RCC_CR, RCC_CR_PLLON);
+
+    /**< Wait until the PLL clock is locked. */
+    while (!GET_BIT(RCC_CR, RCC_CR_PLLRDY))
+        ;
 
     /**< Select PLL as the system clock source. */
     CLR_BIT(RCC_CFGR, RCC_CFGR_SW0);
